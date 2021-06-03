@@ -83,7 +83,6 @@ public class RenderManagerEditor extends ClassEditor {
 		GlStateManager.disableCull();
 		GlStateManager.tryBlendFuncSeparate(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, 1, 0);
 
-		float f = entity.width / 2.0F;
 		AxisAlignedBB axis = entity.getEntityBoundingBox();
 		RenderGlobal.drawBoundingBox(axis.minX - entity.posX + x, axis.minY - entity.posY + y,
 				axis.minZ - entity.posZ + z, axis.maxX - entity.posX + x, axis.maxY - entity.posY + y,
@@ -106,6 +105,7 @@ public class RenderManagerEditor extends ClassEditor {
 		}
 
 		if (entity instanceof EntityLivingBase && settings.isEyeHeightBoxEnabled()) {
+			float f = entity.width / 2.0F;
 			Color eyeHeightBoxColor = settings.getEyeHeightBoxColor();
 			RenderGlobal.drawBoundingBox(x - f, y + entity.getEyeHeight() - 0.01F, z - f, x + f,
 					y + entity.getEyeHeight() + 0.01F, z + f, eyeHeightBoxColor.getRed() / 255F,
