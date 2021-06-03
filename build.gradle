@@ -1,0 +1,72 @@
+buildscript {
+    repositories {
+        jcenter()
+        maven { url = "http://files.minecraftforge.net/maven" }
+    }
+    dependencies {
+        classpath 'net.minecraftforge.gradle:ForgeGradle:2.3-SNAPSHOT'
+    }
+}
+
+plugins {
+    id 'de.undercouch.download' version '4.0.0'
+}
+
+apply plugin: 'net.minecraftforge.gradle.forge'
+
+version = "1"
+group = "de.jumpingpxl"
+archivesBaseName = "customhitboxes"
+
+sourceCompatibility = targetCompatibility = '1.8'
+
+compileJava.options.encoding = 'UTF-8'
+
+compileJava {
+    sourceCompatibility = targetCompatibility = '1.8'
+}
+
+minecraft {
+    version = "1.12.2-14.23.0.2512"
+    runDir = "run"
+    mappings = "snapshot_20171003"
+}
+
+dependencies {
+    compile(files('libs/lm_api_mc1.12.2.jar'))
+}
+
+processResources {
+    inputs.property "version", project.version
+    inputs.property "mcversion", project.minecraft.version
+
+    from(sourceSets.main.resources.srcDirs) {
+        include 'mcmod.info'
+        expand 'version':project.version, 'mcversion':project.minecraft.version
+    }
+        
+    from(sourceSets.main.resources.srcDirs) {
+        exclude 'mcmod.info'
+    }
+}
+
+reobf {
+	jar {
+		useNotchSrg()
+	}
+}
+
+task downloadLabyAPI() {
+    group("labymod")
+
+    File libraryDirectory = new File("libs/")
+
+    if (!libraryDirectory.exists()) {
+        libraryDirectory.mkdirs()
+    }
+
+    download {
+        src "https://dl.labymod.net/latest/api/files/lm_api_mc1.12.2.jar"
+        dest 'libs/'
+    }
+}
