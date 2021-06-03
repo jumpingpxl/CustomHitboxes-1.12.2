@@ -67,7 +67,7 @@ public class RenderManagerEditor extends ClassEditor {
 	                                          double y, double z, float entityYaw,
 	                                          float partialTicks,
 	                                          double renderPosX, double renderPosY,
-	                                          double renderPosZ) { //TODO: Fix Transparency Bug
+	                                          double renderPosZ) {
 		Color color = getColor(settings, entity);
 		if (Objects.isNull(color)) {
 			if (renderManager.isDebugBoundingBox()) {
