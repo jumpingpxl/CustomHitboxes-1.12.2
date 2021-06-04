@@ -19,7 +19,6 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.Vec3d;
-import org.lwjgl.opengl.GL11;
 import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.tree.AbstractInsnNode;
 import org.objectweb.asm.tree.ClassNode;
@@ -33,13 +32,13 @@ import java.util.Objects;
 
 public class RenderManagerEditor extends ClassEditor {
 
-	private static final String MINECRAFT_CLASS = (LabyModCoreMod.isObfuscated() ? "bhz"
+	private static final String MINECRAFT_CLASS = (LabyModCoreMod.isObfuscated() ? "bib"
 			: "net/minecraft/client/Minecraft");
-	private static final String RENDER_MANAGER_CLASS = (LabyModCoreMod.isObfuscated() ? "bzd"
+	private static final String RENDER_MANAGER_CLASS = (LabyModCoreMod.isObfuscated() ? "bzf"
 			: "net/minecraft/client/renderer/entity/RenderManager");
 	private static final String RENDER_MANAGER_EDITOR_CLASS =
 			"de/jumpingpxl/labymod/customhitboxes" + "/asm/RenderManagerEditor";
-	private static final String ENTITY_CLASS = (LabyModCoreMod.isObfuscated() ? "ve"
+	private static final String ENTITY_CLASS = (LabyModCoreMod.isObfuscated() ? "vg"
 			: "net/minecraft/entity/Entity");
 	private static final String IS_REDUCED_DEBUG_METHOD = (LabyModCoreMod.isObfuscated() ? "an"
 			: "isReducedDebug");
@@ -49,6 +48,12 @@ public class RenderManagerEditor extends ClassEditor {
 			? "a" : "renderDebugBoundingBox");
 	private static final String DEBUG_BOUNDING_BOX_FIELD = (LabyModCoreMod.isObfuscated() ? "t"
 			: "debugBoundingBox");
+	private static final String RENDER_POS_X_FIELD = (LabyModCoreMod.isObfuscated() ? "o"
+			: "renderPosX");
+	private static final String RENDER_POS_Y_FIELD = (LabyModCoreMod.isObfuscated() ? "p"
+			: "renderPosY");
+	private static final String RENDER_POS_Z_FIELD = (LabyModCoreMod.isObfuscated() ? "q"
+			: "renderPosZ");
 	private static Settings settings;
 
 	public RenderManagerEditor() {
@@ -77,11 +82,11 @@ public class RenderManagerEditor extends ClassEditor {
 			}
 		}
 
-		GlStateManager.depthMask(true);
+		GlStateManager.depthMask(false);
 		GlStateManager.disableTexture2D();
 		GlStateManager.disableLighting();
 		GlStateManager.disableCull();
-		GlStateManager.tryBlendFuncSeparate(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, 1, 0);
+		GlStateManager.enableBlend();
 
 		AxisAlignedBB axis = entity.getEntityBoundingBox();
 		RenderGlobal.drawBoundingBox(axis.minX - entity.posX + x, axis.minY - entity.posY + y,
@@ -202,12 +207,8 @@ public class RenderManagerEditor extends ClassEditor {
 						}
 					} else if (abstractNode.getOpcode() == Opcodes.INVOKEVIRTUAL) {
 						MethodInsnNode methodNode = (MethodInsnNode) abstractNode;
-						System.out.println(
-								"VIRTUAL " + methodNode.owner + ";" + methodNode.name + ";" + methodNode.desc);
 						if (methodNode.owner.equals(MINECRAFT_CLASS) && methodNode.name.equals(
 								IS_REDUCED_DEBUG_METHOD) && methodNode.desc.equals("()Z")) {
-							System.out.println("VIRTUALSUCCESS " + methodNode.owner + ";" + methodNode.name + ";"
-									+ methodNode.desc);
 							instructions.insert(abstractNode,
 									new MethodInsnNode(Opcodes.INVOKESTATIC, RENDER_MANAGER_EDITOR_CLASS,
 											"isReducedDebug", "()Z", false));
@@ -220,14 +221,17 @@ public class RenderManagerEditor extends ClassEditor {
 								RENDER_DEBUG_BOUNDING_BOX_METHOD) && methodNode.desc.equals(
 								"(L" + ENTITY_CLASS + ";DDDFF)V")) {
 							InsnList insnList = new InsnList();
-							insnList.insert(new FieldInsnNode(Opcodes.GETFIELD,
-									"net/minecraft/client/renderer/entity/RenderManager", "renderPosZ", "D"));
+							insnList.insert(
+									new FieldInsnNode(Opcodes.GETFIELD, RENDER_MANAGER_CLASS, RENDER_POS_Z_FIELD,
+											"D"));
 							insnList.insert(new VarInsnNode(Opcodes.ALOAD, 0));
-							insnList.insert(new FieldInsnNode(Opcodes.GETFIELD,
-									"net/minecraft/client/renderer/entity/RenderManager", "renderPosY", "D"));
+							insnList.insert(
+									new FieldInsnNode(Opcodes.GETFIELD, RENDER_MANAGER_CLASS, RENDER_POS_Y_FIELD,
+											"D"));
 							insnList.insert(new VarInsnNode(Opcodes.ALOAD, 0));
-							insnList.insert(new FieldInsnNode(Opcodes.GETFIELD,
-									"net/minecraft/client/renderer/entity/RenderManager", "renderPosX", "D"));
+							insnList.insert(
+									new FieldInsnNode(Opcodes.GETFIELD, RENDER_MANAGER_CLASS, RENDER_POS_X_FIELD,
+											"D"));
 							insnList.insert(new VarInsnNode(Opcodes.ALOAD, 0));
 
 							instructions.insertBefore(abstractNode, insnList);

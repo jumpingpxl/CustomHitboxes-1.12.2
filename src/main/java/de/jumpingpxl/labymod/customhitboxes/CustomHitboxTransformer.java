@@ -10,7 +10,7 @@ import org.objectweb.asm.tree.ClassNode;
 
 public class CustomHitboxTransformer implements IClassTransformer {
 
-	private static final String RENDER_MANAGER_CLASS = (LabyModCoreMod.isObfuscated() ? "bzd"
+	private static final String RENDER_MANAGER_CLASS = (LabyModCoreMod.isObfuscated() ? "bzf"
 			: "net.minecraft.client.renderer.entity.RenderManager");
 
 	@Override
