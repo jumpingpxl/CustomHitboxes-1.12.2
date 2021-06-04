@@ -19,6 +19,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.Vec3d;
+import org.lwjgl.opengl.GL11;
 import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.tree.AbstractInsnNode;
 import org.objectweb.asm.tree.ClassNode;
@@ -82,11 +83,12 @@ public class RenderManagerEditor extends ClassEditor {
 			}
 		}
 
-		GlStateManager.depthMask(false);
+		GlStateManager.pushMatrix();
 		GlStateManager.disableTexture2D();
 		GlStateManager.disableLighting();
 		GlStateManager.disableCull();
 		GlStateManager.enableBlend();
+		GlStateManager.tryBlendFuncSeparate(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, 1, 0);
 
 		AxisAlignedBB axis = entity.getEntityBoundingBox();
 		RenderGlobal.drawBoundingBox(axis.minX - entity.posX + x, axis.minY - entity.posY + y,
@@ -130,11 +132,11 @@ public class RenderManagerEditor extends ClassEditor {
 			tessellator.draw();
 		}
 
-		GlStateManager.enableTexture2D();
-		GlStateManager.enableLighting();
 		GlStateManager.enableCull();
+		GlStateManager.enableLighting();
+		GlStateManager.enableTexture2D();
 		GlStateManager.disableBlend();
-		GlStateManager.depthMask(true);
+		GlStateManager.popMatrix();
 	}
 
 	private static Color getColor(Settings settings, Entity entity) {
