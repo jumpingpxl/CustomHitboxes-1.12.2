@@ -89,6 +89,7 @@ public class WheelSelector extends ColorSelector {
 	}
 
 	private void drawCrossHair(Tessellator tessellator, BufferBuilder buffer, double x, double y) {
+		GlStateManager.enableTexture2D();
 		Minecraft.getMinecraft().getTextureManager().bindTexture(ICONS);
 		float offset = 0.00390625F;
 		buffer.begin(7, DefaultVertexFormats.POSITION_TEX);
