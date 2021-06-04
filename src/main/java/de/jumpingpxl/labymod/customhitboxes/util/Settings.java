@@ -10,14 +10,10 @@ import de.jumpingpxl.labymod.customhitboxes.util.dynamicelements.Icon;
 import net.labymod.settings.elements.HeaderElement;
 import net.labymod.settings.elements.SettingsElement;
 import net.labymod.utils.Material;
-import net.minecraft.util.ResourceLocation;
 
 import java.util.List;
 
 public class Settings {
-
-	private static final ResourceLocation DYE_LIME = new ResourceLocation(
-			"textures" + "/items/dye_powder_lime.png");
 
 	private final CustomHitboxes customHitboxes;
 
@@ -224,14 +220,15 @@ public class Settings {
 						DynamicBooleanElement.create("§6Custom Color", Icon.of(Material.LEVER),
 								ownColorThrowables, newValue -> {
 									ownColorThrowables = newValue;
-											getConfig().addProperty("ownColorThrowables", newValue);
-											saveConfig();
-										}), ColorPickerElement.create("§6Custom Throwable Color",
-										Icon.of(Material.INK_SACK, 10), getThrowableColor(), newColor -> {
-											throwableColor = Color.fromRgb(newColor);
-											getConfig().addProperty("throwableColor", newColor);
-											saveConfig();
-										})));
+									getConfig().addProperty("ownColorThrowables", newValue);
+									saveConfig();
+								}),
+						ColorPickerElement.create("§6Custom Throwable Color", Icon.of(Material.INK_SACK, 10),
+								getThrowableColor(), newColor -> {
+									throwableColor = Color.fromRgb(newColor);
+									getConfig().addProperty("throwableColor", newColor);
+									saveConfig();
+								})));
 		settingsElements.add(DynamicHeaderElement.create(15, "", "§4§lIMPORTANT",
 				"§cOnly a selection of entities is supported for\n§ccolored & permanent hitboxes.",
 				"§cTo view colored hitboxes of all entities (for example\n§cArmorStands & MineCarts), "
