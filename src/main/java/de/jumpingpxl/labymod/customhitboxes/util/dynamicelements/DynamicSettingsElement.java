@@ -85,7 +85,9 @@ public class DynamicSettingsElement extends SettingsElement {
 			if (icon.getIcon() instanceof ItemStack) {
 				DRAW_UTILS.drawItem(icon.getItemStack(), x + 4D, y + 3D, null);
 			} else {
-
+				mc.getTextureManager().bindTexture(icon.getResourceLocation());
+				DRAW_UTILS.drawTexture(x + 4D, y + 3D, 256.0D, 256.0D, 16.0D, 16.0D);
+				mc.getTextureManager().deleteTexture(icon.getResourceLocation());
 			}
 		}
 

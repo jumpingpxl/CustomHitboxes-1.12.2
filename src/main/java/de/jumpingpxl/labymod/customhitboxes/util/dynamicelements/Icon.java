@@ -39,6 +39,10 @@ public class Icon {
 		return new Icon(resourceLocation);
 	}
 
+	public static Icon of(String resourceLocation) {
+		return new Icon(new ResourceLocation(resourceLocation));
+	}
+
 	public ItemStack getItemStack() {
 		return itemStack;
 	}
